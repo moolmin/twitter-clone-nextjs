@@ -44,3 +44,7 @@ dayjs.extend(relativeTime);
 
 ### 💡 라이브러리 고를때 npm trends 활용하기
 [npm trends](https://npmtrends.com/)에서 라이브러리 트랜드와 경쟁 상대까지 볼 수 있다. npm trends도 같이 고려하여 적절한 라이브러리를 고르자. 
+
+### dynamic viewport 동적 뷰포트 단위로 
+모바일 safari에서의 100vh는 주소창이 없을 때를 기준으로 삼기 때문에 의도치 않은 스크롤로 화면이 깨진다.
+동적 뷰포트 단위는 사용자가 스크롤할 때 변경될 수 있다. 
