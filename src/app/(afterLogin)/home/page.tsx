@@ -5,6 +5,7 @@ import PostForm from "@/app/(afterLogin)/home/_component/PostForm";
 import Post from "@/app/(afterLogin)/_component/Post";
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import PostRecommends from './_component/PostRecommends';
+import TabDecider from './_component/TabDecider';
 
 async function getPostRecommends() {
   const res = await fetch(`http://localhost:9090/api/postRecommends`, {
@@ -37,7 +38,8 @@ export default async function Home() {
       <TabProvider>
         <Tab/>
         <PostForm />
-        <PostRecommends />
+        <TabDecider />
+        {/* <PostRecommends /> */}
       </TabProvider>
       </HydrationBoundary>
     </main>
