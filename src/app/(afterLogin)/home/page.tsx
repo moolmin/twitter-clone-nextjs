@@ -2,46 +2,22 @@ import style from './home.module.css';
 import Tab from "@/app/(afterLogin)/home/_component/Tab";
 import TabProvider from "@/app/(afterLogin)/home/_component/TabProvider";
 import PostForm from "@/app/(afterLogin)/home/_component/PostForm";
-import Post from "@/app/(afterLogin)/_component/Post";
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import PostRecommends from './_component/PostRecommends';
-import TabDecider from './_component/TabDecider';
-
-async function getPostRecommends() {
-  const res = await fetch(`http://localhost:9090/api/postRecommends`, {
-    next: {
-      tags: ['posts', 'recommends'],
-    },
-    cache: 'no-store',
-  });
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
-  }
-
-  return res.json()
-}
+import {Suspense} from "react";
+import Loading from "@/app/(afterLogin)/home/loading";
+import TabDeciderSuspense from "@/app/(afterLogin)/home/_component/TabDeciderSuspense";
 
 export default async function Home() {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchInfiniteQuery({queryKey: ['posts', 'recommends'], queryFn: getPostRecommends, initialPageParam: 0});
-  const dehydratedState = dehydrate(queryClient);
-
-  // queryClient.getQueryData(['posts', 'recommends'])
-
   return (
     <main className={style.main}>
-      <HydrationBoundary state={dehydratedState}>
       <TabProvider>
         <Tab/>
-        <PostForm />
-        <TabDecider />
-        {/* <PostRecommends /> */}
+        <PostForm/>
+        <Suspense fallback={<Loading />}>
+        {/* 이건 TabDeciderSuspense를 나중에 불러와서 최적화를 하기 위함 */}
+        {/* 로딩이 필요한 부분은 suspense로 감싸면서 다른 컴포넌트부터 먼저 렌더링될수있게하자 */}
+          <TabDeciderSuspense />
+        </Suspense>
       </TabProvider>
-      </HydrationBoundary>
     </main>
   )
 }
